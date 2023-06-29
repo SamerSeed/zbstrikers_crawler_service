@@ -2,8 +2,14 @@
 config.yaml
 urllist/
 
-# ML model
+# ML models
 models/
+
+# keywords
+wordlist.txt
+
+# proxies
+proxies.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
