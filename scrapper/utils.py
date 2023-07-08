@@ -1,6 +1,6 @@
 import abc
 import yaml
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from typing import List
 import ahocorasick
 import pickle
@@ -14,6 +14,22 @@ class TLSAdapter(requests.adapters.HTTPAdapter):
         ctx.set_ciphers('DEFAULT@SECLEVEL=1')
         kwargs['ssl_context'] = ctx
         return super(TLSAdapter, self).init_poolmanager(*args, **kwargs)
+
+@dataclass
+class UrlTask:
+    is_rss:bool = False
+    lower_ssl_security:bool = False
+    site_name:str = ''
+    main_xpath:str = ''
+    title_xpath:str = ''
+    text_xpath:str = ''
+    href_xpath:str = ''
+    city_xpath:str = ''
+    date_xpath:str = ''
+    base_url:str = ''
+    encoding:str = ''
+    url:str = ''
+
 
 @dataclass
 class SiteConfigClass:
@@ -49,7 +65,21 @@ class SiteConfigClass:
             res.urls_list = ff.readlines()
         
         return res
+    def produce_task_head(self)->UrlTask:
+        tsk = UrlTask()
+        for cls_field in fields(self):
+            if not (cls_field.name in  {"urls_path" , "urls_list"}):
+                setattr(tsk, cls_field.name, getattr(self, cls_field.name))
+        return tsk
+    def create_task_list(self)->List[UrlTask]:
+        tasklist = []
+        for url in self.urls_list:
+            tsk = self.produce_task_head()
+            tsk.url = url
+            tasklist += [tsk]
+        return tasklist
 
+        
 def fix_tg_links(links:List[str]):
     for i, url in enumerate(links):
         url_parsed = parse.urlparse(url)
@@ -83,7 +113,22 @@ class WordSearchWrapper:
         res.automaton.load(path, pickle.loads)
         return res
 
+@dataclass
+class UrlTask:
+    is_rss:bool = False
+    lower_ssl_security:bool = False
+    site_name:str = ''
+    main_xpath:str = ''
+    title_xpath:str = ''
+    text_xpath:str = ''
+    href_xpath:str = ''
+    city_xpath:str = ''
+    date_xpath:str = ''
+    base_url:str = ''
+    encoding:str = ''
+    url:str = ''
     
+
 if __name__=="__main__":
     wswrper = WordSearchWrapper(["два", "пятнадцать", "нет"])
     assert wswrper.check_text("grkenog нет ")

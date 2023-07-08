@@ -127,6 +127,10 @@ class ScrapeRssSpider(scrapy.Spider):
     urls_list = []
     parse_method = None
     err_method = None
+    def __init__(self, site_config:utils.SiteConfigClass, *args, **kwargs):
+        super(ScrapeRssSpider, self).__init__(*args, **kwargs)
+        
+
     def start_requests(self):
         for url in self.urls_list:
             yield scrapy.Request(url=url, callback=self.parse_method, errback=self.err_method)
@@ -138,12 +142,19 @@ class SpiderMaker:
         f = open(file_path, encoding='utf-8')
         self.configs:List[utils.SiteConfigClass] = [utils.SiteConfigClass.from_yaml(i) for i in yaml.load(f, Loader=yaml.FullLoader)]
         f.close()
+        task_lists = [i.create_task_list() for i in self.configs]
+        self.tasks = []
+        for i in task_lists:
+            self.tasks += i
+        print(self.tasks)
 
 
     def spawn_spider(self, id):
-        spd = ScrapeRssSpider()
-        spd.urls_list = self.configs[id].urls_list
+        spd = ScrapeRssSpider(self.configs[id])
         return spd
+    
+    def prepare_process(self, id):
+        pass
 
 
 if __name__ == "__main__":
