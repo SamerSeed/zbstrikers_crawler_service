@@ -2,6 +2,8 @@
 config.yaml
 urllist/
 
+#logs
+*.log
 # ML models
 models/
 
