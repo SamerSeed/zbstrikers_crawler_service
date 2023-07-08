@@ -12,7 +12,7 @@ wordlist.txt
 proxies.txt
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
+*__pycache__
 *.py[cod]
 *$py.class
 
@@ -79,6 +79,7 @@ ipython_config.py
 __pypackages__/
 
 # Environments
+.vscode
 .env
 .venv
 env/

@@ -7,10 +7,6 @@ from natasha import Segmenter, MorphVocab, NewsEmbedding, NewsMorphTagger, Doc
 from navec import Navec
 from slovnet import NER
 
-from .classifier import parse_dates, fix_tg_links, undo_fix_tg_link, \
-                        get_texts, TIME_SLEEP, TIMEOUT, TO_SLEEP
-
-
 THRESHOLD_V2 = 0.2792921738167593
 
 
@@ -214,83 +210,3 @@ class ZabastcomClassificator:
         y = np.round(y, 3)
         return y
 
-
-def search_news_v2(
-        texts,
-        links,
-        dates_s,
-        checkpoint,
-        classifier):
-    if len(links) == 0:
-        return []
-
-    # parse dates
-    now = datetime.now()
-    dates = parse_dates(
-        dates_s,
-        now,
-    )
-
-    links = fix_tg_links(links)
-
-    texts = np.asarray(texts, dtype=object)
-    links = np.asarray(links)
-    dates = np.asarray(dates)
-
-    # filter by date
-    mask = []
-    for date in dates:
-        mask.append((date.year, date.month, date.day)
-                    == (now.year, now.month, now.day))
-    mask = np.asarray(mask)
-    if mask.sum() == 0:
-        return []
-    texts = texts[mask]
-    links = links[mask]
-
-    # get texts
-    res = get_texts(
-        texts,
-        links,
-        checkpoint['div_map'],
-        checkpoint['collect_all'],
-        checkpoint['sub_p'],
-        checkpoint['ignore_header'],
-        checkpoint['extract_map'],
-        checkpoint['endswith'],
-        checkpoint['lower_ssl_security'],
-        timeout=TIMEOUT,
-        time_sleep=TIME_SLEEP,
-        to_sleep=TO_SLEEP,
-    )
-
-    # remove empty texts
-    w_text = [(url, text)
-              for url, text in res if text is not None and text.strip()]
-    texts = np.asarray([text for _, text in w_text])
-    links = np.asarray([url for url, _ in w_text])
-
-    # get unique texts
-    texts, idx = np.unique(texts, return_index=True)
-    if len(idx) == 0:
-        return []
-    links = links[idx]
-
-    pred_prob = classifier.predict(texts)
-
-    # predict
-    pred = (pred_prob >= THRESHOLD_V2).astype(np.bool8)
-    if 0 == np.count_nonzero(pred):
-        return []
-
-    pred_prob = pred_prob[pred]
-    links = links[pred]
-    texts = texts[pred]
-    res = []
-    for idx, (prob, url, text) in enumerate(zip(pred_prob, links, texts)):
-        if url in checkpoint['history_v2'].url_map:
-            continue
-        checkpoint['history_v2'].url_map[url] = prob
-        url_to_show = undo_fix_tg_link(url)
-        res.append((prob, url_to_show, text))
-    return res

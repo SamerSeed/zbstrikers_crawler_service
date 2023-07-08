@@ -58,7 +58,7 @@ def load_parser_res(path: Path):
 
 class Parser:
 
-    def __init__(self, config):
+    def __init__(self, config:str):
         self.items_accum = defaultdict(dict)
         self.items = defaultdict(list)
         self.new_items = defaultdict(list)

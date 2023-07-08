@@ -1,0 +1,292 @@
+2023-07-02 22:33:31,302 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:40:42,857 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:46:18,036 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:46:34,200 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:46:52,402 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:47:06,803 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:50:03,181 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:50:36,371 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:51:31,186 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:52:22,535 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:55:49,716 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:57:52,888 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:58:11,409 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:58:59,271 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 22:59:35,629 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 23:01:05,594 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 23:01:31,774 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 23:01:59,888 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 23:06:22,762 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 23:13:29,711 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 23:15:00,611 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 23:15:32,006 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 23:16:23,301 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 23:16:23,839 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,840 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,841 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,843 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,846 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,849 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,850 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,852 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,854 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,856 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,856 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,858 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,859 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,860 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,863 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,865 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,867 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,868 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,869 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,871 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,872 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,874 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,876 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,878 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,880 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,881 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,883 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,884 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,885 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,886 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,888 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,889 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,890 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,892 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,893 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,895 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,898 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,900 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,902 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,903 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,905 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,905 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,906 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,907 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,909 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,910 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,911 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,912 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,912 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,913 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,914 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,915 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,917 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,918 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,919 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,920 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,921 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,923 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,925 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,925 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,926 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,926 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,927 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,928 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,929 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,929 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,930 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,931 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,931 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,932 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,933 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,933 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,934 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,935 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,936 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,938 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,939 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,940 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,941 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,942 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,943 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,943 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,944 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,945 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,946 - ERROR - app_logger - Request failed
+2023-07-02 23:16:23,946 - ERROR - app_logger - Request failed
+2023-07-02 23:19:29,773 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 23:19:30,318 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,319 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,322 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,324 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,326 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,327 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,329 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,330 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,332 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,333 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,335 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,336 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,337 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,339 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,346 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,348 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,349 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,351 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,352 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,354 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,357 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,359 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,360 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,362 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,363 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,365 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,366 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,368 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,369 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,371 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,372 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,374 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,377 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,380 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,381 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,382 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,384 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,385 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,387 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,388 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,389 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,391 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,392 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,393 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,395 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,398 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,400 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,401 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,403 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,404 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,405 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,407 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,408 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,410 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,411 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,413 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,414 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,416 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,418 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,420 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,422 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,423 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,424 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,426 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,427 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,427 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,428 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,429 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,431 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,432 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,433 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,435 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,437 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,439 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,441 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,442 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,443 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,444 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,445 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,445 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,446 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,447 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,448 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,449 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,450 - ERROR - app_logger - Request failed
+2023-07-02 23:19:30,450 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,023 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-02 23:23:32,563 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,564 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,565 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,567 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,569 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,571 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,572 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,573 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,575 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,577 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,578 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,579 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,581 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,582 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,584 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,586 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,588 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,589 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,590 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,592 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,593 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,595 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,597 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,601 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,636 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,671 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,678 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,685 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,697 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,698 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,700 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,702 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,704 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,705 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,707 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,710 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,729 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,732 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,735 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,738 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,739 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,740 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,746 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,747 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,747 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,748 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,749 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,750 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,750 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,751 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,752 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,752 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,753 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,753 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,754 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,755 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,755 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,756 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,757 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,757 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,758 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,759 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,759 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,760 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,761 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,762 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,764 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,766 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,767 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,767 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,768 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,769 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,769 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,770 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,771 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,771 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,772 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,773 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,773 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,774 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,775 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,775 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,776 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,777 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,777 - ERROR - app_logger - Request failed
+2023-07-02 23:23:32,778 - ERROR - app_logger - Request failed
+2023-07-05 13:57:21,395 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-05 14:01:27,205 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-05 14:02:25,581 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-05 14:02:48,039 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-05 14:03:41,434 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-05 14:46:18,832 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-08 17:30:03,699 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-08 17:30:35,624 - WARNING - app_logger - Не заполнен файл с прокси
+2023-07-08 17:31:31,315 - WARNING - app_logger - Не заполнен файл с прокси
