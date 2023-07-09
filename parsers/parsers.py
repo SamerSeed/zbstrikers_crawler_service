@@ -19,9 +19,11 @@ class ParserBase:
     kword_checker = utils.WordSearchWrapper(WORDS)
     reject_not_current = True
     FILTER_BY_KEYWORDS = True
-    # now = datetime.datetime.now()
+    now = datetime.datetime.now()
     def parse(self):
         raise RuntimeError("Method must be redefined")
+    def update_now(self):
+        self.now = datetime.datetime.now()
 
 
 class ParserInit(ParserBase):
@@ -72,16 +74,14 @@ class ParserInit(ParserBase):
                 if date:
                     date = date.strip()
 
-        return utils.parse_date(date, datetime.datetime.now())
+        return utils.parse_date(date, self.now)
         
     def parse(self, context, config: tasks.UrlTask):
-        # self.now = datetime.datetime.now()
         items = defaultdict(list)
         for element in html.fromstring(context).xpath(config.main_xpath):
             date = self.date_parse_routine(element, config)
             if self.reject_not_current:
-                now = datetime.datetime.now()
-                if (date.year, date.month, date.day) != (now.year, now.month, now.day):
+                if (date.year, date.month, date.day) != (self.now.year, self.now.month, self.now.day):
                     continue
             title = self.title_routine(element, config)            
             text = self.text_routine(element, config)
@@ -100,4 +100,48 @@ class ParserInit(ParserBase):
                 })
         return items
 
+
+
+class ParserRss(ParserBase):
+    def __init__(self, *args, **kwargs):
+        super(ParserRss, self).__init__(*args, **kwargs)
+    def check_format(self, thefeed:feedparser.FeedParserDict):
+        return 'links' in thefeed.channel and thefeed.channel['links'] and \
+                'href' in thefeed.channel['links'][0] and \
+                'bezformata' in thefeed.channel['links'][0]['href']
+    def parse(self, context, config: tasks.UrlTask):
+        items = defaultdict(list)
+        site_name = config.site_name
+        thefeed = feedparser.parse(context, sanitize_html=False)
+        is_bezformata = self.check_format(thefeed)
+        for thefeedentry in thefeed.entries:
+            date = thefeedentry.get('published', '')
+            date = utils.parse_date(date, self.now)
+            if self.reject_not_current:
+                if (date.year, date.month, date.day) != (self.now.year, self.now.month, self.now.day):
+                    continue
+            
+            title = thefeedentry.get("title", "")
+            href2 = thefeedentry.get("link", "")
+            text = thefeedentry.get("summary", "").strip()
+            if is_bezformata:
+                desc = thefeedentry.get('description', '')
+                pos = desc.find('href')
+                if -1 != pos:
+                    desc = desc[pos:]
+                    split = desc.split('"')
+                    if len(split) >= 2:
+                        link = split[1]
+                        if link:
+                            href2 = link
+            found_keywords = self.kword_checker.check_text(title) or self.kword_checker(text)
+            if not self.FILTER_BY_KEYWORDS or found_keywords:
+                items[site_name].append({
+                    'href2': href2,
+                    'title': title,
+                    'date': str(date),
+                    'text': text,
+                    'base_url': config.base_url,
+                })
+        return items
 
