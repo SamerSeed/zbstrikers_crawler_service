@@ -24,6 +24,8 @@ import base64
 import logging
 import scrapy
 import yaml
+from scrapy.crawler import CrawlerProcess
+from tasks import tasks
 from . import utils
 
 
@@ -122,38 +124,37 @@ class RandomProxy(object):
                 proxy, len(self.proxies)))
 
 
-class ScrapeRssSpider(scrapy.Spider):
-    name = 'scrape-rss'
-    urls_list = []
-    parse_method = None
-    err_method = None
-    def __init__(self, site_config:utils.SiteConfigClass, *args, **kwargs):
-        super(ScrapeRssSpider, self).__init__(*args, **kwargs)
-        
+class ScrapeUnifiedSpider(scrapy.Spider):
+    name = 'scrapy'
+    def __init__(self, tasks:List[tasks.UrlTask], parser, *args, **kwargs):
+        super(ScrapeUnifiedSpider, self).__init__(*args, **kwargs)
+        self.tasks = tasks
+        self.parser = parser
 
     def start_requests(self):
-        for url in self.urls_list:
-            yield scrapy.Request(url=url, callback=self.parse_method, errback=self.err_method)
-    
+        for task  in self.tasks:
+            yield scrapy.Request(url=task.url, callback=self.parser, errback=self.err_method)
+
+    def err_method(self):
+        pass
     
 
 class SpiderMaker:
     def __init__(self, file_path:str ="config.yaml"):
         f = open(file_path, encoding='utf-8')
-        self.configs:List[utils.SiteConfigClass] = [utils.SiteConfigClass.from_yaml(i) for i in yaml.load(f, Loader=yaml.FullLoader)]
+        self.configs:List[tasks.SiteConfigClass] = [tasks.SiteConfigClass.from_yaml(i) for i in yaml.load(f, Loader=yaml.FullLoader)]
         f.close()
         task_lists = [i.create_task_list() for i in self.configs]
-        self.tasks = []
+        self.tasks:List[utils.UrlTask] = []
         for i in task_lists:
             self.tasks += i
-        print(self.tasks)
-
-
-    def spawn_spider(self, id):
-        spd = ScrapeRssSpider(self.configs[id])
-        return spd
     
-    def prepare_process(self, id):
+    def prepare_process(self):
+        process = CrawlerProcess({
+            'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+        })
+        process.crawl(ScrapeUnifiedSpider, self.tasks, )
+        process.start()
         pass
 
 
