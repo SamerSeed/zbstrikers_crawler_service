@@ -87,7 +87,7 @@ class ParserInit(ParserBase):
             text = self.text_routine(element, config)
             city = self.city_routine(element, config)
             href, href2 = self.href_routine(element, config)
-            found_keywords = self.kword_checker.check_text(title) or self.kword_checker(text)
+            found_keywords = self.kword_checker.check_text(title) or self.kword_checker.check_text(text)
             if not self.FILTER_BY_KEYWORDS or found_keywords:
                 items[config.site_name].append({
                     'href': href,
@@ -134,7 +134,7 @@ class ParserRss(ParserBase):
                         link = split[1]
                         if link:
                             href2 = link
-            found_keywords = self.kword_checker.check_text(title) or self.kword_checker(text)
+            found_keywords = self.kword_checker.check_text(title) or self.kword_checker.check_text(text)
             if not self.FILTER_BY_KEYWORDS or found_keywords:
                 items[site_name].append({
                     'href2': href2,
@@ -145,3 +145,8 @@ class ParserRss(ParserBase):
                 })
         return items
 
+class UniParser:
+    def __init__(self):
+        self.base_parser = ParserInit()
+        self.rss_parser = ParserRss()
+    

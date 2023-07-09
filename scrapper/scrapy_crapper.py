@@ -26,6 +26,7 @@ import scrapy
 import yaml
 from scrapy.crawler import CrawlerProcess
 from tasks import tasks
+from parsers import parsers
 from . import utils
 
 
@@ -133,12 +134,17 @@ class ScrapeUnifiedSpider(scrapy.Spider):
 
     def start_requests(self):
         for task  in self.tasks:
-            yield scrapy.Request(url=task.url, callback=self.parser, errback=self.err_method)
+            yield scrapy.Request(url=task.url, 
+                                 callback=self.parse_method, 
+                                 errback=self.err_method, meta={"task":task})
 
     def err_method(self):
         pass
-    
-
+    def parse_method(self, response:scrapy.http.Response):
+        if response.meta["task"].is_rss:
+            yield self.parser.rss_parser.parse(response.text, response.meta["task"])
+        else:
+            yield self.parser.base_parser.parse(response.text, response.meta["task"])
 class SpiderMaker:
     def __init__(self, file_path:str ="config.yaml"):
         f = open(file_path, encoding='utf-8')
@@ -148,15 +154,14 @@ class SpiderMaker:
         self.tasks:List[utils.UrlTask] = []
         for i in task_lists:
             self.tasks += i
+        self.uni_parser_box = parsers.UniParser()
     
     def prepare_process(self):
         process = CrawlerProcess({
             'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
         })
-        process.crawl(ScrapeUnifiedSpider, self.tasks, )
-        process.start()
-        pass
-
+        process.crawl(ScrapeUnifiedSpider, self.tasks, self.uni_parser_box)
+        return process
 
 if __name__ == "__main__":
     f = open("config.yaml", encoding='utf-8')
