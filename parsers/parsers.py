@@ -1,31 +1,59 @@
 import datetime
 import unicodedata
 from collections import defaultdict
-from pathlib import Path
-from urllib.parse import urlparse
-import re
 import feedparser
-import requests
-import validators
-import yaml
 from logger import logger
 from lxml import html
 from . import utils
 from tasks import tasks
 from parsers import WORDS
+from dataclasses import dataclass,  field
+from typing import Dict, List
 
-
+@dataclass
+class SiteItem:
+    href:str = ''
+    href2:str = ''
+    title:str = ''
+    date:str = ''
+    text:str = ''
+    city:str = ''
+    base_url:str = ''
+                
 class ParserBase:
     kword_checker = utils.WordSearchWrapper(WORDS)
     reject_not_current = True
     FILTER_BY_KEYWORDS = True
     now = datetime.datetime.now()
-    def parse(self):
-        raise RuntimeError("Method must be redefined")
+    def parse_(self, context, config: tasks.UrlTask)->Dict[str, List[SiteItem]]:
+        raise RuntimeError("Method must be overriden")
+    
+    def parse(self, context, config: tasks.UrlTask)->Dict[str, List[SiteItem]]:
+        pre_res = self.parse_(context, config)
+        return self.postprocess(pre_res)
+    
     def update_now(self):
         self.now = datetime.datetime.now()
-
-
+    def postprocess(self, items:Dict[str, List[SiteItem]])->Dict[str, List[SiteItem]]:
+        new_items = defaultdict(list)
+        items_accum = defaultdict(list)
+        for site_name, site_parse_list in items.items():
+            for item in site_parse_list:
+                if not item.href2:
+                    if 'http' in item.href or 'https' in item.href:
+                        #TODO: добавить регулярку
+                        item.href2 = item.href
+                    else:
+                        item.href2 = item.base_url + item.href
+                
+                if item.href2 in items_accum[site_name]:
+                    continue
+                new_items[site_name].append(item)
+        for site_name, value in new_items.items():
+            for item in value:
+                items_accum[site_name][item.href2] = item
+        return new_items
+    
 class ParserInit(ParserBase):
     def __init__(self, *args, **kwargs):
         super(ParserInit, self).__init__(*args, **kwargs)
@@ -76,7 +104,8 @@ class ParserInit(ParserBase):
 
         return utils.parse_date(date, self.now)
         
-    def parse(self, context, config: tasks.UrlTask):
+    
+    def parse_(self, context, config: tasks.UrlTask)->Dict[str, List[SiteItem]]:
         items = defaultdict(list)
         for element in html.fromstring(context).xpath(config.main_xpath):
             date = self.date_parse_routine(element, config)
@@ -89,15 +118,15 @@ class ParserInit(ParserBase):
             href, href2 = self.href_routine(element, config)
             found_keywords = self.kword_checker.check_text(title) or self.kword_checker.check_text(text)
             if not self.FILTER_BY_KEYWORDS or found_keywords:
-                items[config.site_name].append({
-                    'href': href,
-                    'href2': href2,
-                    'title': title,
-                    'date': str(date),
-                    'text': text,
-                    'city': city,
-                    'base_url': config.base_url,
-                })
+                itm = SiteItem(
+                    href,
+                    href2,
+                    title,
+                    str(date),
+                    text,
+                    city,
+                    config.base_url)
+                items[config.site_name].append(itm)
         return items
 
 
@@ -109,7 +138,7 @@ class ParserRss(ParserBase):
         return 'links' in thefeed.channel and thefeed.channel['links'] and \
                 'href' in thefeed.channel['links'][0] and \
                 'bezformata' in thefeed.channel['links'][0]['href']
-    def parse(self, context, config: tasks.UrlTask):
+    def parse_(self, context, config: tasks.UrlTask)->Dict[str, List[SiteItem]]:
         items = defaultdict(list)
         site_name = config.site_name
         thefeed = feedparser.parse(context, sanitize_html=False)
@@ -136,17 +165,87 @@ class ParserRss(ParserBase):
                             href2 = link
             found_keywords = self.kword_checker.check_text(title) or self.kword_checker.check_text(text)
             if not self.FILTER_BY_KEYWORDS or found_keywords:
-                items[site_name].append({
-                    'href2': href2,
-                    'title': title,
-                    'date': str(date),
-                    'text': text,
-                    'base_url': config.base_url,
-                })
+                itm = SiteItem(
+                    '',
+                    href2,
+                    title,
+                    str(date),
+                    text,
+                    '',
+                    config.base_url)
+                
+                items[site_name].append(itm)
         return items
 
 class UniParser:
     def __init__(self):
         self.base_parser = ParserInit()
         self.rss_parser = ParserRss()
-    
+        
+def parse_text(
+        data,
+        url,
+        div_map,
+        netloc,
+        collect_all,
+        sub_p,
+        ignore_header,
+        extract_map):
+    if netloc == 't.me':
+        text = parse_tg(
+            data,
+            url,
+        )
+        return text, False
+
+    # parse
+    try:
+        soup = BeautifulSoup(data, features='lxml')
+    except:
+        return None, False
+
+    # remove divs from extract_map
+    if netloc in extract_map:
+        for div in extract_map[netloc]:
+            for s in soup.find_all(*div):
+                s.extract()
+
+    # remove vk reposts
+    if netloc == 'vk.com':
+        refs = soup.find_all('a', {'class': 'pi_author'})
+        for ref in refs:
+            if ref.getText() == 'ЗабастКом':
+                return None, True
+
+    divs = div_map[netloc]
+    to_collect_all = netloc in collect_all
+
+    # fix for vz.ru
+    if netloc == 'vz.ru':
+        url_parsed = urlparse(url)
+        divs[0][1]['data-url'] = url_parsed.path
+
+    # collect article text
+    keys = [f'h{i}' for i in range(1, 6)] + ['p', 'li']
+    text = ''
+    if netloc not in ignore_header:
+        divs = [('h1',)] + divs
+    for div in divs:
+        text_wraps = []
+        if to_collect_all:
+            text_wraps = soup.find_all(*div)
+        else:
+            text_wraps = [soup.find(*div)]
+        for text_wrap in text_wraps:
+            if text_wrap is None:
+                continue
+            if netloc in sub_p and div[0] not in keys:
+                for key in keys:
+                    for p in text_wrap.find_all(key, recursive=True):
+                        text += p.getText() + '\n'
+            else:
+                text += text_wrap.getText() + '\n'
+
+    return text, False
+
+ 

@@ -17,6 +17,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+from logger import logger
 from typing import List
 import re
 import random
@@ -28,8 +29,8 @@ from scrapy.crawler import CrawlerProcess
 from tasks import tasks
 from parsers import parsers
 from . import utils
-
-
+from newspaper import Article
+from newspaper.configuration import Configuration
 log = logging.getLogger('scrapy.proxies')
 
 
@@ -135,16 +136,45 @@ class ScrapeUnifiedSpider(scrapy.Spider):
     def start_requests(self):
         for task  in self.tasks:
             yield scrapy.Request(url=task.url, 
-                                 callback=self.parse_method, 
-                                 errback=self.err_method, meta={"task":task})
+                                 callback=self.parse, 
+                                 errback=self.download_with_newspaper, meta={"task":task})
 
-    def err_method(self):
-        pass
-    def parse_method(self, response:scrapy.http.Response):
+    def err_method(self, failure):
+        logger.warning(repr(failure))
+    def download_with_newspaper(url, netloc, to_sleep, time_sleep, proxies=None):
+        has_failed = False
+        text = None
+
+        config = newspaper.Configuration()
+        config.language = 'ru'
+        config.proxies = proxies
+        config.request_timeout = TIMEOUT
+        config.browser_user_agent = 'Mozilla/5.0'
+
+        warning = ''
+        error = ''
+        try:
+            article = Article(url, config=config)
+            article.download()
+            if netloc in to_sleep:
+                sleep(time_sleep)
+            article.parse()
+            if not article.text:
+                warning = 'newspaper3k failed to get text for ' + url
+                text = article.title + '\n' + article.text
+        except Exception as e:
+            error = f'Error downloading {url} with newspaper3k: {e}'
+            has_failed = True
+        return text, has_failed, warning, error
+
+
+    def parse(self, response:scrapy.http.Response):
         if response.meta["task"].is_rss:
-            yield self.parser.rss_parser.parse(response.text, response.meta["task"])
+            parse_method = self.parser.rss_parser.parse
         else:
-            yield self.parser.base_parser.parse(response.text, response.meta["task"])
+            parse_method = self.parser.base_parser.parse
+        item = parse_method(response.text, response.meta["task"])
+
 class SpiderMaker:
     def __init__(self, file_path:str ="config.yaml"):
         f = open(file_path, encoding='utf-8')
@@ -162,6 +192,7 @@ class SpiderMaker:
         })
         process.crawl(ScrapeUnifiedSpider, self.tasks, self.uni_parser_box)
         return process
+    
 
 if __name__ == "__main__":
     f = open("config.yaml", encoding='utf-8')

@@ -1,7 +1,7 @@
 import re
 import pickle
 from datetime import datetime
-
+import logger
 import numpy as np
 from natasha import Segmenter, MorphVocab, NewsEmbedding, NewsMorphTagger, Doc
 from navec import Navec
@@ -122,6 +122,16 @@ class ZabastcomClassificator:
         text = re.sub(r'(_пер )+', r'_пер ', text+' ')
         text = re.sub(r'(_лок )+', r'_лок ', text+' ')
         text = re.sub(r'(_чсл )+', r'_чсл ', text+' ')
+        text = text.replace(
+                'Если ваши трудовые права нарушены, вы можете обратиться в государственную инспекцию труда, ' +
+                'в том числе дистанционно через сервис "Сообщить о проблеме" на портале "Онлайнинспекция.рф"',
+                '',
+        )
+        text = text.replace(
+                'Подписывайтесь на нас в',
+                '',
+        )
+
         l = text.split()
         for i in range(len(l)-1):
             if l[i] == 'не':
@@ -210,3 +220,293 @@ class ZabastcomClassificator:
         y = np.round(y, 3)
         return y
 
+def search_news_v2(
+        texts,
+        links,
+        dates_s,
+        checkpoint,
+        classifier):
+    if len(links) == 0:
+        return []
+
+    # parse dates
+    now = datetime.now()
+    dates = parse_dates(
+        dates_s,
+        now,
+    )
+
+    links = fix_tg_links(links)
+
+    texts = np.asarray(texts, dtype=object)
+    links = np.asarray(links)
+    dates = np.asarray(dates)
+
+    # filter by date
+    mask = []
+    for date in dates:
+        mask.append((date.year, date.month, date.day)
+                    == (now.year, now.month, now.day))
+    mask = np.asarray(mask)
+    if mask.sum() == 0:
+        return []
+    texts = texts[mask]
+    links = links[mask]
+
+    # get texts
+    res = get_texts(
+        texts,
+        links,
+        checkpoint['div_map'],
+        checkpoint['collect_all'],
+        checkpoint['sub_p'],
+        checkpoint['ignore_header'],
+        checkpoint['extract_map'],
+        checkpoint['endswith'],
+        checkpoint['lower_ssl_security'],
+        timeout=TIMEOUT,
+        time_sleep=TIME_SLEEP,
+        to_sleep=TO_SLEEP,
+    )
+
+    # remove empty texts
+    w_text = [(url, text)
+              for url, text in res if text is not None and text.strip()]
+    texts = np.asarray([text for _, text in w_text])
+    links = np.asarray([url for url, _ in w_text])
+
+    # get unique texts
+    texts, idx = np.unique(texts, return_index=True)
+    if len(idx) == 0:
+        return []
+    links = links[idx]
+
+    pred_prob = classifier.predict(texts)
+
+    # predict
+    pred = (pred_prob >= THRESHOLD_V2).astype(np.bool8)
+    if 0 == np.count_nonzero(pred):
+        return []
+
+    pred_prob = pred_prob[pred]
+    links = links[pred]
+    texts = texts[pred]
+    res = []
+    for idx, (prob, url, text) in enumerate(zip(pred_prob, links, texts)):
+        if url in checkpoint['history_v2'].url_map:
+            continue
+        checkpoint['history_v2'].url_map[url] = prob
+        url_to_show = undo_fix_tg_link(url)
+        res.append((prob, url_to_show, text))
+    return res
+
+
+
+def get_texts(
+        texts,
+        links,
+        div_map,
+        collect_all,
+        sub_p,
+        ignore_header,
+        extract_map,
+        endswith,
+        lower_ssl_security,
+        timeout,
+        time_sleep,
+        to_sleep):
+    res = []
+    for text_from_feed, url in tqdm(list(zip(texts, links))):
+        download_failed = False
+        data, netloc = None, ''
+        try:
+            data, netloc = get_text(
+                url,
+                div_map,
+                endswith,
+                lower_ssl_security,
+                timeout,
+            )
+        except Exception as e:
+            logger.error(f'Error downloading {url}: {e}')
+            download_failed = True
+        if netloc in to_sleep:
+            sleep(time_sleep)
+
+        def download_with_newspaper(url, netloc, to_sleep, time_sleep, proxies=None):
+            has_failed = False
+            text = None
+
+            config = Configuration()
+            config.language = 'ru'
+            config.proxies = proxies
+            config.request_timeout = TIMEOUT
+            config.browser_user_agent = 'Mozilla/5.0'
+
+            warning = ''
+            error = ''
+            try:
+                article = Article(url, config=config)
+                article.download()
+                if netloc in to_sleep:
+                    sleep(time_sleep)
+                article.parse()
+                if not article.text:
+                    warning = 'newspaper3k failed to get text for ' + url
+                text = article.title + '\n' + article.text
+            except Exception as e:
+                error = f'Error downloading {url} with newspaper3k: {e}'
+                has_failed = True
+            return text, has_failed, warning, error
+
+        text = ''
+        has_failed = False
+        to_skip = False
+        if download_failed or data is None:
+            text, has_failed, warning, error = download_with_newspaper(
+                url,
+                netloc,
+                to_sleep,
+                time_sleep,
+            )
+            for proxy in PROXIES:
+                if not has_failed:
+                    break
+                proxies = {
+                    'http': f'http://{proxy}',
+                    'https': f'https://{proxy}',
+                }
+                text, has_failed, warning, error = download_with_newspaper(
+                    url,
+                    netloc,
+                    to_sleep,
+                    time_sleep,
+                    proxies=proxies,
+                )
+            if warning:
+                logger.warning(warning)
+            if error:
+                logger.warning(error)
+        else:
+            try:
+                text, to_skip = parse_text(
+                    data,
+                    url,
+                    div_map,
+                    netloc,
+                    collect_all,
+                    sub_p,
+                    ignore_header,
+                    extract_map,
+                )
+            except Exception as e:
+                logger.warning(f'Error parsing text from {url}: {e}')
+                has_failed = True
+
+        if to_skip:
+            continue
+
+        if has_failed or not text:
+            text = text_from_feed
+
+        if text:
+            # костыль для РосТруда
+            text = text.replace(
+                'Если ваши трудовые права нарушены, вы можете обратиться в государственную инспекцию труда, ' +
+                'в том числе дистанционно через сервис "Сообщить о проблеме" на портале "Онлайнинспекция.рф"',
+                '',
+            )
+            text = text.replace(
+                'Подписывайтесь на нас в',
+                '',
+            )
+        else:
+            logger.error(f'Failed to get text for {url}')
+            continue
+
+        res.append((url, text))
+    return res
+
+
+def get_text(
+        url,
+        div_map,
+        endswith,
+        lower_ssl_security,
+        timeout):
+    if not url:
+        return None, ''
+    url = url.replace('Источник:', '').strip()
+
+    url_to_parse = url
+    if url.startswith('https://web.archive.org/web/'):
+        url_to_parse = url.replace('https://web.archive.org/web/', '')
+    url_parsed = urlparse(url_to_parse)
+    netloc = url_parsed.netloc
+
+    for template in endswith:
+        if netloc.endswith(template):
+            netloc = template
+            break
+
+    if netloc not in div_map:
+        return None, netloc
+
+    def do_request(url, netloc, lower_ssl_security, timeout, proxies=None):
+        has_failed = False
+        data = None
+        error = ''
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        session = requests
+        if netloc in lower_ssl_security:
+            session = requests.Session()
+            session.mount('https://', TLSAdapter())
+        try:
+            response = session.get(
+                url,
+                timeout=timeout,
+                headers=headers,
+                proxies=proxies,
+            )
+            response.raise_for_status()
+            data = response.content
+        except Exception as e:
+            error = f'{e}'
+            has_failed = True
+        return data, has_failed, error
+
+    data, has_failed, error = do_request(
+        url,
+        netloc,
+        lower_ssl_security,
+        timeout,
+    )
+
+    for proxy in PROXIES:
+        if not has_failed:
+            break
+        proxies = {
+            'http': f'http://{proxy}',
+            'https': f'https://{proxy}',
+        }
+        data, has_failed, error = do_request(
+            url,
+            netloc,
+            lower_ssl_security,
+            timeout,
+            proxies=proxies,
+        )
+
+    if error:
+        logger.warning(error)
+    if has_failed or data is None:
+        return None, netloc
+
+    try:
+        try:
+            data = data.decode('utf-8')
+        except UnicodeDecodeError:
+            data = zlib.decompress(data, 16 + zlib.MAX_WBITS)
+    except:
+        pass
+    return data, netloc
