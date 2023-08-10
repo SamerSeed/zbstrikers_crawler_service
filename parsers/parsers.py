@@ -181,7 +181,40 @@ class UniParser:
     def __init__(self):
         self.base_parser = ParserInit()
         self.rss_parser = ParserRss()
-        
+
+from bs4 import BeautifulSoup
+
+
+def parse_tg(data: str, url: str):
+    soup = BeautifulSoup(data, features='lxml')
+    div = soup.find(
+        'div',
+        {
+            'class': 'tgme_widget_message js-widget_message',
+            'data-post': '/'.join(url.split('/')[-2:]),
+        }
+    )
+    if not div:
+        div = soup.find(
+            'div',
+            {
+                'class': 'tgme_widget_message text_not_supported_wrap js-widget_message',
+                'data-post': '/'.join(url.split('/')[-2:]),
+            },
+        )
+    if not div:
+        return None
+    div = div.find(
+        'div', {'class': 'tgme_widget_message_text js-message_text'})
+    if not div:
+        div = div.find(
+            'div', {'class': 'tgme_widget_message_text js-message_text before_footer'})
+    if not div:
+        return None
+    return div.getText()
+
+
+
 def parse_text(
         data,
         url,
